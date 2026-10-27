@@ -1,0 +1,14 @@
+plugins {
+  id 'com.android.library'
+  id 'expo-module-gradle-plugin'
+}
+
+group = 'com.mizan.widget'
+version = '1.0.0'
+
+android {
+  namespace 'com.mizan.widget'
+  defaultConfig {
+    minSdkVersion 24
+  }
+}
