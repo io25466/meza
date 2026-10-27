@@ -1,0 +1,41 @@
+name: Expo CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. جلب الكود من المستودع
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. إعداد لغة Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm' # أو 'yarn' حسب ما تستخدم
+
+      # 3. إعداد أداة Expo CLI و EAS
+      - name: Setup Expo / EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      # 4. تثبيت حزم المشروع
+      - name: Install dependencies
+        run: npm install # أو yarn install
+
+      # 5. تشغيل الفحص البرمجي (اختياري)
+      - name: Run Linters / Tests
+        run: npm run lint --if-present
+
+      # 6. بناء التطبيق باستخدام EAS
+      - name: Build App
+        run: eas build --platform all --profile production --non-interactive
